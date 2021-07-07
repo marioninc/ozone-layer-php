@@ -9,7 +9,7 @@ class Sample extends API {
         $this->method = $method;
         $this->param = $param;
         $this->database = $database;
-        $this->table = 't_distribute_item';
+        $this->table = 'sample';
     }
 
     public function get_list(){

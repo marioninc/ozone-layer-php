@@ -10,8 +10,8 @@ class Config{
     
     // System Database //
     const db_config = [
-        'database_name' => '',
-        'host' => '',
+        'database_name' => 'ozone-layer-php',
+        'host' => 'localhost',
         'user' => '',
         'pass' => '',
     ];
