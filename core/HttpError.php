@@ -40,7 +40,7 @@ class HttpError{
         header("HTTP/1.0 {$code} {$status}");
         if(!$is_api){
             $root_dir = get_root_dir();
-            require $root_dir.'/page/error.php';
+            require $root_dir.'page/error.php';
             exit;
         }
     }
