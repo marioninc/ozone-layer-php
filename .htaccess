@@ -1,0 +1,39 @@
+# MultiViews Off
+Options -MultiViews
+
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} js/(.*.js)$
+RewriteRule js/(.*.js)$ web_root/js/$1 [QSA,L]
+
+RewriteCond %{REQUEST_URI} imgs/(.*\..*)$
+RewriteRule imgs/(.*\..*)$ web_root/imgs/$1 [QSA,L]
+
+RewriteCond %{REQUEST_URI} css/(.*.css)$
+RewriteRule css/(.*.css)$ web_root/css/$1 [QSA,L]
+
+RewriteCond %{REQUEST_URI} api/(.*)/(.*)/(.*)/$
+RewriteRule api/(.*)/(.*)/(.*)/$ api_index.php?method=$1&page=$2&param=$3&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} api/(.*)/(.*)/$
+RewriteRule api/(.*)/(.*)/$ api_index.php?method=$1&page=$2&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} api/(.*)/(.*)/(.*)$
+RewriteRule api/(.*)/(.*)/([^\.]*)$ api_index.php?method=$1&page=$2&param=$3&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} api/(.*)/([^\.]*)$
+RewriteRule api/(.*)/(.*)$ api_index.php?method=$1&page=$2 [QSA,L]
+
+
+RewriteCond %{REQUEST_URI} ^(.*)/(.*)/(.*)/$
+RewriteRule ^(.*)/(.*)/(.*)/$ index.php?method=$1&page=$2&param=$3&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} ^(.*)/(.*)/$
+RewriteRule ^(.*)/(.*)/$ index.php?method=$1&page=$2&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} ^(.*)/(.*)/(.*)$
+RewriteRule ^(.*)/(.*)/([^\.]*)$ index.php?method=$1&page=$2&param=$3&original_uri=%{REQUEST_URI} [QSA,L]
+
+RewriteCond %{REQUEST_URI} ^(.*)/([^\.]*)$
+RewriteRule ^(.*)/(.*)$ index.php?method=$1&page=$2&original_uri=%{REQUEST_URI} [QSA,L]
