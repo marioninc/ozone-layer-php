@@ -1,6 +1,6 @@
 <?php
 #
-# DB core v1.0.1
+# DB core v1.0.2
 #
 class Database{
     // プロパティ
@@ -90,13 +90,13 @@ class Database{
         $now = nowtime();
         //作成日時の指定がなければ現在時刻を指定
         if (!isset($data['create'])) {
-            $columns .= "`created`,";
+            $columns .= "`".Config::created_column_name."`,";
             $insert_spease .= '?,';
             $insert_data[] = $now;
         }
         //更新日時の指定がなければ現在時刻を指定
         if (!isset($data['update'])) {
-            $columns .= "`modified`,";
+            $columns .= "`".Config::updated_column_name."`,";
             $insert_spease .= '?,';
             $insert_data[] = $now;
         }
@@ -112,7 +112,7 @@ class Database{
             // debug($sql);
             // debug($insert_data);
             // debug($errorinfo);
-            $id = $this->dbh->lastInsertId('id');
+            $id = $this->dbh->lastInsertId(Config::id_column_name);
             unset($insert_data);
             if($errorinfo[1] != null) return false;
             return $id;
@@ -131,7 +131,10 @@ class Database{
     * @param  string  key_name  id扱いにするkeyカラム
     * @return bool    result    成功かどうか 
     */
-    public function updateSQL($tablename,$id,$data,$key_name = 'id'){
+    public function updateSQL($tablename,$id,$data,$key_name = null){
+        if($key_name == null){
+            $key_name = Config::id_column_name;
+        }
         //nullチェック
         if(empty($tablename) || empty($id) || empty($data)){
             //データがなければ中断
@@ -145,8 +148,8 @@ class Database{
             $set_str .= " `{$key}`=?,";
             $update_data[] = $value;
         }
-        if (!isset($data['modified'])) {
-            $set_str .= "`modified`=?,";
+        if (!isset($data['update'])) {
+            $set_str .= "`".Config::updated_column_name."`=?,";
             $update_data[] = nowtime();
         }
         $set_str = rtrim($set_str,',');

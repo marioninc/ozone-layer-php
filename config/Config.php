@@ -15,6 +15,9 @@ class Config{
         'user' => '',
         'pass' => '',
     ];
+    const updated_column_name = "modified"; // 更新日時カラム名
+    const created_column_name = "created"; // インサート日時カラム名
+    const id_column_name = "id"; // プライマリーキーのカラム名
    
     // Proxy //
     const proxy_flg = false;
