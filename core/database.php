@@ -1,6 +1,6 @@
 <?php
 #
-# DB core v1.0.2
+# DB core v1.0.3
 #
 class Database{
     // プロパティ
@@ -148,16 +148,26 @@ class Database{
             $set_str .= " `{$key}`=?,";
             $update_data[] = $value;
         }
+
         if (!isset($data['update'])) {
             $set_str .= "`".Config::updated_column_name."`=?,";
             $update_data[] = nowtime();
         }
         $set_str = rtrim($set_str,',');
-        $update_data[] = $id;
+        if(is_array($id) && is_array($key_name) && count($id) == count($key_name)){
+            foreach ($id as $key => $value) {
+                $where = "`{$key_name[$key]}` =? AND";
+                $update_data[] = $id[$key];
+            }
+            $where = rtrim($set_str,'AND');
+        }else{
+            $where = "`{$key_name}` =?";
+            $update_data[] = $id;
+        }
 
         // update
         try{
-            $sql = "UPDATE `{$tablename}` SET{$set_str} WHERE `{$key_name}` =?";
+            $sql = "UPDATE `{$tablename}` SET{$set_str} WHERE {$where};";
             $stmt = $this->dbh -> prepare($sql);
             $r = $stmt -> execute($update_data);
             $errorinfo = $stmt->errorinfo();
@@ -277,7 +287,7 @@ class Database{
                         }
                         if (is_numeric($key)) {
                             $where .= ' '.$value.' AND';
-                        } elseif ($value == null){
+                        } elseif ($value === null){
                             $where .= ' '.$key.' IS NULL AND';
                         }elseif($mode == 'LIKE'){
                             $where .= ' '.$key_split[0].' LIKE ? AND';
